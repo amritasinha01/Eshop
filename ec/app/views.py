@@ -222,7 +222,7 @@ class checkout(View):
                 'CALLBACK_URL': 'http://127.0.0.1:8000/app/handlerequest/',
             }
             param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
-            #return render(request, 'app/paytm.html',{'param_dict': param_dict})
+            return render(request, 'app/paytm.html',{'param_dict': param_dict}) #if you have problem here plz contact me . i have another code for paytm integration with little changes
 
         return render(request, 'app/checkout.html', {'totalamount': totalamount,  'add': add})
 
