@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from PayTm import Checksum
-MERCHANT_KEY = 'kbzkIDSbJiV_03p5'
+MERCHANT_KEY = 'your_merchant_ky'
 
 
 # Create your views here.
@@ -212,7 +212,7 @@ class checkout(View):
             order = OrderPlaced.objects.create(user=user, customer= customer, product=p.product, quantity=p.quantity, payment=payment)
             order_ids.append(str(order.id))
             param_dict = {
-                'MID': 'dNaFrQ56228252473218',#WorldP64425807474247
+                'MID': 'your_Merchnt_id_here',
                 'ORDER_ID': ",".join(order_ids),
                 'TXN_AMOUNT': str(totalamount),
                 'CUST_ID': user.email,
