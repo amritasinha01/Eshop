@@ -239,14 +239,23 @@ def checkout(request):
             state = request.POST.get('state', '')
             zipcode = request.POST.get('zipcode', '')
             order_ids = []
-            totalamount =  request.POST.get('totalamount', '')
-
+            user = request.user
+            cart = Cart.objects.filter(user=user)
+            add = Customer.objects.filter(user=user)
+            customer = Customer.objects.get(user=user)
+            cart_items = Cart.objects.filter(user=user)
+            amount = 0
+            for p in cart:
+                value = p.quantity * p.product.discounted_price
+                amount = amount + value
+            totalamount = amount + 40
+            user = request.user
             payment = Payment.objects.create(user=user, amount=totalamount, paid=False)
             order = OrderPlaced.objects.create(user=user, customer=customer, product=p.product, quantity=p.quantity,
                                                payment=payment)
             order_ids.append(str(order.id))
             param_dict = {
-                'MID': 'WorldP64425807474247',  # WorldP64425807474247
+                'MID': 'your_Merchnt_id_here', 
                 'ORDER_ID': ",".join(order_ids),
                 'TXN_AMOUNT': str(totalamount),
                 'CUST_ID': user.email,
@@ -258,6 +267,7 @@ def checkout(request):
             param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
             return render(request, 'app/paytm.html',{'param_dict': param_dict})
         return render(request, 'app/checkout.html')
+
         '''
 
 @login_required
