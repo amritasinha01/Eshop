@@ -188,6 +188,7 @@ def show_cart(request):
         totalitem = len(Cart.objects.filter(user=request.user))
         wishitem = len(Wishlist.objects.filter(user=request.user))
     return render(request, 'app/addtocart.html',locals())
+#checkout view by GET method
 @method_decorator(login_required,name='dispatch')
 class checkout(View):
     def get(self,request):
@@ -222,9 +223,42 @@ class checkout(View):
                 'CALLBACK_URL': 'http://127.0.0.1:8000/app/handlerequest/',
             }
             param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
-            return render(request, 'app/paytm.html',{'param_dict': param_dict}) #if you have problem here plz contact me . i have another code for paytm integration with little changes
+            return render(request, 'app/paytm.html',{'param_dict': param_dict}) #this checkout view having some error. you have to mute paytm.html or checkout.html. Debug it.
 
         return render(request, 'app/checkout.html', {'totalamount': totalamount,  'add': add})
+    #checkout view by POST method. This view is working properly. But you have to change payment form in checkout.html. because i copied it from code with harry , it is giving error
+    '''
+    @login_required
+def checkout(request):
+        if request.method == "POST":
+
+            name = request.POST.get('name', '')
+            locality = request.POST.get('locality', '')
+            city = request.POST.get('city', '')
+            mobile = request.POST.get('mobile', '')
+            state = request.POST.get('state', '')
+            zipcode = request.POST.get('zipcode', '')
+            order_ids = []
+            totalamount =  request.POST.get('totalamount', '')
+
+            payment = Payment.objects.create(user=user, amount=totalamount, paid=False)
+            order = OrderPlaced.objects.create(user=user, customer=customer, product=p.product, quantity=p.quantity,
+                                               payment=payment)
+            order_ids.append(str(order.id))
+            param_dict = {
+                'MID': 'WorldP64425807474247',  # WorldP64425807474247
+                'ORDER_ID': ",".join(order_ids),
+                'TXN_AMOUNT': str(totalamount),
+                'CUST_ID': user.email,
+                'INDUSTRY_TYPE_ID': 'Retail',
+                'WEBSITE': 'WEBSTAGING',
+                'CHANNEL_ID': 'WEB',
+                'CALLBACK_URL': 'http://127.0.0.1:8000/app/handlerequest/',
+            }
+            param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
+            return render(request, 'app/paytm.html',{'param_dict': param_dict})
+        return render(request, 'app/checkout.html')
+        '''
 
 @login_required
 @csrf_exempt
