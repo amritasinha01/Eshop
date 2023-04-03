@@ -88,49 +88,44 @@
 {% block title %}Checkout{% endblock title %}
 {% block main-content %}
 <div class="container">
-    <form action="payment_process.php" method="POST">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required><br><br>
+  <form action="{% url 'checkout' %}" method="POST">
+    {% csrf_token %}
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
 
-  <label for="locality">Locality:</label>
-  <input type="text" id="locality" name="locality" required><br><br>
+    <label for="locality">Locality:</label>
+    <input type="text" id="locality" name="locality" required><br><br>
 
-  <label for="city">City:</label>
-  <input type="text" id="city" name="city" required><br><br>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required><br><br>
 
-  <label for="mobile">Mobile:</label>
-  <input type="text" id="mobile" name="mobile" required><br><br>
+    <label for="mobile">Mobile:</label>
+    <input type="text" id="mobile" name="mobile" required><br><br>
 
-  <label for="state">State:</label>
-  <input type="text" id="state" name="state" required><br><br>
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required><br><br>
 
-  <label for="zipcode">Zip Code:</label>
-  <input type="text" id="zipcode" name="zipcode" required><br><br>
-
-   <label for="amount">Total Amount:</label>
-  <input type="text" id="amount" name="amount" required><br><br>
-
-  <button type="submit" name="submit">Pay with Paytm</button>
-</form>
-{% comment %} Paytm Payment Form {% endcomment %}
-         {% if param_dict %}
-         <form method="post" action="{{param_dict.CHECKSUMHASH}}" class="mt-5">
-            {% csrf_token %}
-            {% for key, value in param_dict.items %}
-                <input type="hidden" name="{{ key }}" value="{{ value }}">
-            {% endfor %}
-            <button type="submit" class="btn btn-success px-5 fw-bold">Pay Now</button>
-         </form>
-         {% endif %}
-         {% comment %} End of Paytm Payment Form {% endcomment %}
+    <label for="zipcode">Zip Code:</label>
+    <input type="text" id="zipcode" name="zipcode" required><br><br>
 
 
+
+    <button type="submit" name="submit">Pay with Paytm</button>
+  </form>
 </div>
+ {% if param_dict %}
+                    <div class="mt-5">
+                        <h5>Pay with Paytm</h5>
+                        <hr>
+                        <form method="post" action="{{param_dict.CHECKSUMHASH}}">
+                            {% csrf_token %}
+                            {% for key, value in param_dict.items %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary px-5 fw-bold">Proceed to Paytm</button>
+                        </form>
+                    </div>
+                {% endif %} -->
+
 {% endblock main-content %}
-{% block payment-gateway %}
-<script>
 
-</script>
-
-
-{% endblock payment-gateway %} -->
