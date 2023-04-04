@@ -226,7 +226,7 @@ class checkout(View):
             return render(request, 'app/paytm.html',{'param_dict': param_dict}) #this checkout view having some error. you have to mute paytm.html or checkout.html. Debug it.
 
         return render(request, 'app/checkout.html', {'totalamount': totalamount,  'add': add})
-    #checkout view by POST method. This view is working properly. But you have to change payment form in checkout.html. because i copied it from code with harry , it is giving error
+    #checkout view by POST method. This code is working properly
     '''
     @login_required
 def checkout(request):
